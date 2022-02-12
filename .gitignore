@@ -152,7 +152,6 @@ cython_debug/
 #.idea/
 
 
-data/
 .vscode/
 pd_index/
 indexes/
