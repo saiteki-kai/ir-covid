@@ -6,6 +6,7 @@ import demoji
 import nltk
 from nltk.corpus import stopwords, wordnet as wn
 from nltk.stem import WordNetLemmatizer
+from gensim.models import Word2Vec
 
 
 def remove_urls(text):
@@ -143,12 +144,10 @@ def preprocess(
     return result
 
 # Most similar word with Word2Vec
-from gensim.models import Word2Vec
-import nltk
 
 def most_similar(word:str, wv_model=None):
     if wv_model is None:
-        wv_model = Word2Vec.load("word2vec.model")
+        wv_model = Word2Vec.load("data/word2vec.model")
 
     try:
         most_similar_word = wv_model.wv.most_similar(word, topn=1)
@@ -162,6 +161,8 @@ def most_similar(word:str, wv_model=None):
 def query_similar_words(query:str, wv_model=None):
     new_query = ""
     query = [t.split() for t in  nltk.sent_tokenize(query)][0]
+    if wv_model is None:
+        wv_model = Word2Vec.load("data/word2vec.model")
     for word in query:
         new_query += " " + word
         ms = most_similar(word, wv_model)
@@ -170,6 +171,3 @@ def query_similar_words(query:str, wv_model=None):
     
     new_query = new_query[1:] #Just delete the first free space
     return new_query
-
-def ciao():
-    return None
