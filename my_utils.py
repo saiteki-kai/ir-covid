@@ -171,3 +171,45 @@ def query_similar_words(query:str, wv_model=None):
 
     new_query = new_query[1:] # Just delete the first free space
     return new_query
+
+def reduce_queries(queries, narrative_threshold=10, description_threshold=10):
+    
+    narrative = queries.narrative.str.split(expand=True).stack().value_counts().to_dict()
+    description = queries.description.str.split(expand=True).stack().value_counts().to_dict()
+
+    to_remove_word = []
+
+    for key in narrative:
+        if narrative[key] > narrative_threshold:
+            to_remove_word.append(key)
+
+    for key in description:
+        if description[key] > description_threshold:
+            to_remove_word.append(key)
+
+
+    query = queries.copy()
+    for index, row in query.iterrows():
+        description = [t.split() for t in  nltk.sent_tokenize(row["description"])][0]
+        narrative = [t.split() for t in  nltk.sent_tokenize(row["narrative"])][0]
+
+        new_description = ""
+        for word in description:
+            if word in to_remove_word:
+                new_description += ""
+            else:
+                new_description += " " + word
+        new_description = new_description[0:]
+
+        new_narrative = ""
+        for word in narrative:
+            if word in to_remove_word:
+                new_narrative += ""
+            else:
+                new_narrative += " " + word
+        new_narrative = new_narrative[0:]
+
+        row["description"] = new_description
+        row["narrative"] = new_narrative
+
+    return query   
