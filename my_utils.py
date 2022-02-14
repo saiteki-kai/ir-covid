@@ -164,11 +164,10 @@ def query_similar_words(query:str, wv_model=None):
     if wv_model is None:
         wv_model = Word2Vec.load("data/word2vec.model")
     for word in query_tk:
-        #new_query += " " + word
+        new_query += " " + word
         ms = most_similar(word, wv_model)
         if ms is not None:
             new_query += " " + ms
 
-    # new_quert = new_query[1:] # Just delete the first free space
-    new_query = query + new_query
+    new_query = new_query[1:] # Just delete the first free space
     return new_query
