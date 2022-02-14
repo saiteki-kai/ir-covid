@@ -160,14 +160,15 @@ def most_similar(word:str, wv_model=None):
 
 def query_similar_words(query:str, wv_model=None):
     new_query = ""
-    query = [t.split() for t in  nltk.sent_tokenize(query)][0]
+    query_tk = [t.split() for t in  nltk.sent_tokenize(query)][0]
     if wv_model is None:
         wv_model = Word2Vec.load("data/word2vec.model")
-    for word in query:
-        new_query += " " + word
+    for word in query_tk:
+        #new_query += " " + word
         ms = most_similar(word, wv_model)
         if ms is not None:
             new_query += " " + ms
-    
-    new_query = new_query[1:] #Just delete the first free space
+
+    # new_quert = new_query[1:] # Just delete the first free space
+    new_query = query + new_query
     return new_query
