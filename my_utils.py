@@ -270,7 +270,7 @@ def experiment(indexed_docs, preprocessed_query, qrels):
         [tfidf, bm25, dirichlet_lm],
         preprocessed_query,
         qrels,
-        eval_metrics=[P@5, P@10, nDCG@10, RR(rel=2)],
+        eval_metrics=[P @ 5, P @ 10, nDCG @ 10, RR(rel=2)],
         names=["TF_IDF", "BM25", "DirichletLM"]
     )
     return exp
